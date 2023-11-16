@@ -1,5 +1,29 @@
+
+
+
+
+
+
+
+
+
 var window = new Window("palette","",undefined);
 window.orientation = "column";
+var groupOne = window.add("group", undefined, "groupOne");
+groupOne.orientation = "row";
+var textParrent = groupOne.add("statictext", undefined, "Link properties to Text Layer");
+
+var groupTwo = window.add("group", undefined, "groupTwo");
+groupTwo.orientation = "row";
+//Checkboxes
+var checkboxPosition = groupTwo.add("checkbox", undefined, "Position");
+checkboxPosition.value = true;
+var checkboxScale = groupTwo.add("checkbox", undefined, "Scale");
+checkboxScale.value = false;
+var checkboxRotation = groupTwo.add("checkbox", undefined, "Rotation");
+checkboxRotation.value = false;
+
+
 var groupThree = window.add("group", undefined, "groupThree");
 groupThree.orientation = "row";
 var applyButton = groupThree.add("button", undefined, "Create Box");
@@ -49,16 +73,26 @@ applyButton.onClick = function()
     var shapeGroup = shapeLayer.property("Contents").addProperty("ADBE Vector Group");
 
     var pathGroup = shapeLayer.property("Contents").property("Group 1").property("Contents").addProperty("ADBE Vector Shape - Rect");
-     //Add ex[ressions
+     //Add expressions
     var codeSize = 's=thisComp.layer(index-1);\rw=s.sourceRectAtTime().width;\rh=s.sourceRectAtTime().height;\roffset=effect("Offset")("Slider");\r[w+offset,h+offset]';
     pathGroup.property("Size").expression = codeSize;
     var codePosition = 's=thisComp.layer(index-1);\rw=s.sourceRectAtTime().width/2;\rh=s.sourceRectAtTime().height/2;\rl=s.sourceRectAtTime().left;\rt=s.sourceRectAtTime().top;\r[w+l,h+t]';
     pathGroup.property("Position").expression = codePosition;
 
     var fillGroup = shapeLayer.property("Contents").property("Group 1").property("Contents").addProperty("ADBE Vector Graphic - Fill");
-
-    shapeLayer.property("ADBE Transform Group").property("ADBE Position").expression = 'thisComp.layer(index-1).position';
-    shapeLayer.property("ADBE Transform Group").property("ADBE Anchor Point").expression = 'a = thisLayer.sourceRectAtTime();\rheight = a.height;\rwidth = a.width;\rtop = a.top;\rleft = a.left;\rx = left + width/2;\ry = top + height/2;\r[x,y];';
+    //Parrenting properties of shape layer to the text layer
+    if(checkboxScale.value){
+    shapeLayer.property("ADBE Transform Group").property("ADBE Scale").expression = 'thisComp.layer(index-1).transform.scale';
+    }
+    if(checkboxPosition.value){
+    shapeLayer.property("ADBE Transform Group").property("ADBE Position").expression = 'thisComp.layer(index-1).transform.position';
+    }
+    if(checkboxRotation.value){
+    shapeLayer.property("ADBE Transform Group").property("ADBE Rotate Z").expression = 'thisComp.layer(index-1).transform.rotation';
+    }
+    shapeLayer.property("ADBE Transform Group").property("ADBE Anchor Point").expression = 'thisComp.layer(index-1).transform.anchorPoint';
+    
+    
     //
 
 
