@@ -2,10 +2,6 @@
 
 
 
-testing
-
-
-
 
 var window = new Window("palette","",undefined);
 window.orientation = "column";
