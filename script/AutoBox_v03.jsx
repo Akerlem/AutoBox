@@ -1,4 +1,4 @@
-//AutoBox Script
+//AutoBox Script v1.0
 var window = new Window("palette","",undefined);
 window.orientation = "column";
 var groupOne = window.add("group", undefined, "groupOne");
