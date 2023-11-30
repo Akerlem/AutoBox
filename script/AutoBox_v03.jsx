@@ -1,8 +1,4 @@
 //v3_branch
-
-
-
-
 var window = new Window("palette","",undefined);
 window.orientation = "column";
 var groupOne = window.add("group", undefined, "groupOne");
@@ -19,10 +15,14 @@ checkboxScale.value = false;
 var checkboxRotation = groupTwo.add("checkbox", undefined, "Rotation");
 checkboxRotation.value = false;
 
-
 var groupThree = window.add("group", undefined, "groupThree");
 groupThree.orientation = "row";
-var applyButton = groupThree.add("button", undefined, "Create Box");
+var checkboxAnchorPoint = groupThree.add("checkbox", undefined, "Center Texts Anchor Point");
+checkboxAnchorPoint.value = false;
+
+var groupFour = window.add("group", undefined, "groupFour");
+groupFour.orientation = "row";
+var applyButton = groupFour.add("button", undefined, "Create Box");
 
 window.center();
 window.show();
@@ -89,6 +89,7 @@ applyButton.onClick = function()
     }
     shapeLayer.property("ADBE Transform Group").property("ADBE Anchor Point").expression = 'textSlider=effect("Text Layer")("Slider");\rthisComp.layer(index-textSlider).transform.anchorPoint';
     
+
     boxControlsOffset = shapeLayer.Effects.addProperty("ADBE Slider Control");
     boxControlsOffset.name = "Offset";
 
@@ -108,8 +109,9 @@ applyButton.onClick = function()
     
     shapeLayer.moveAfter(lastSelectedLayer);
     //Center anchor point for text layer
-    lastSelectedLayer.property("ADBE Transform Group").property("ADBE Anchor Point").expression = 'a = thisLayer.sourceRectAtTime();\rheight = a.height;\rwidth = a.width;\rtop = a.top;\rleft = a.left;\rx = left + width/2;\ry = top + height/2;\r[x,y];';
-    
+    if(checkboxAnchorPoint.value){
+    lastSelectedLayer.property("ADBE Transform Group").property("ADBE Anchor Point").expression = 'a = thisLayer.sourceRectAtTime();\r  height = a.height;\rwidth = a.width;\r  top = a.top;\r  left = a.left;\r    x = left + width/2;\r   y = top + height/2;\r   [x,y];';
+    }
     
     
     app.endUndoGroup();
