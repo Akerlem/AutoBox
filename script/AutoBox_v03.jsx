@@ -1,11 +1,3 @@
-//main_branch
-
-
-
-
-
-
-
 
 var window = new Window("palette","",undefined);
 window.orientation = "column";
