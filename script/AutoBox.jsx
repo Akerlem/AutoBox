@@ -19,10 +19,13 @@ var groupThree = window.add("group", undefined, "groupThree");
 groupThree.orientation = "row";
 var checkboxAnchorPoint = groupThree.add("checkbox", undefined, "Center Texts Anchor Point");
 checkboxAnchorPoint.value = false;
-
+var checkboxPermanentHeight = groupThree.add("checkbox", undefined, "Permanent height based on text line");
+checkboxPermanentHeight.value = false;
+//Buttons
 var groupFour = window.add("group", undefined, "groupFour");
 groupFour.orientation = "row";
 var applyButton = groupFour.add("button", undefined, "Create Box");
+
 
 window.center();
 window.show();
@@ -71,11 +74,18 @@ applyButton.onClick = function()
 
     var pathGroup = shapeLayer.property("Contents").property("Group 1").property("Contents").addProperty("ADBE Vector Shape - Rect");
      //Add expressions
+     if (!checkboxPermanentHeight.value){
     var codeSize = 'textSlider=effect("Text Layer")("Slider");\rs=thisComp.layer(index-textSlider);\rw=s.sourceRectAtTime().width;\rh=s.sourceRectAtTime().height;\roffset=effect("Offset")("Slider");\r[w+offset,h+offset]';
     pathGroup.property("Size").expression = codeSize;
     var codePosition = 'textSlider=effect("Text Layer")("Slider");\rs=thisComp.layer(index-textSlider);\rw=s.sourceRectAtTime().width/2;\rh=s.sourceRectAtTime().height/2;\rl=s.sourceRectAtTime().left;\rt=s.sourceRectAtTime().top;\r[w+l,h+t]';
     pathGroup.property("Position").expression = codePosition;
-
+     }
+     else {
+        var codeSize = 'textSlider=effect("Text Layer")("Slider");\rs=thisComp.layer(index-textSlider);\rs1=thisComp.layer(index+1);\rw=s.sourceRectAtTime().width;\rh=s1.sourceRectAtTime().height;\roffset=effect("Offset")("Slider");\r[w+offset,h+offset]';
+    pathGroup.property("Size").expression = codeSize;
+    var codePosition = 'textSlider=effect("Text Layer")("Slider");\rs=thisComp.layer(index-textSlider);\rs1=thisComp.layer(index+1);\rw=s.sourceRectAtTime().width/2;\rh=s1.sourceRectAtTime().height/2;\rl=s.sourceRectAtTime().left;\rt=s1.sourceRectAtTime().top;\r[w+l,h+t]';
+    pathGroup.property("Position").expression = codePosition;
+     }
     var fillGroup = shapeLayer.property("Contents").property("Group 1").property("Contents").addProperty("ADBE Vector Graphic - Fill");
     //Parrenting properties of shape layer to the text layer
     if(checkboxScale.value){
